@@ -1,0 +1,10 @@
+.galleryFrame{
+  /* border: 2px dotted olive; */
+  width: 539px;
+  height: 400px;
+}
+
+.imgStyle{
+  width: 100%;
+  height: 100%;
+}
