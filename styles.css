@@ -8,3 +8,21 @@
   width: 100%;
   height: 100%;
 }
+
+.remoteButtons{
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 35%;
+}
+
+.remoteButtons div{
+  border: 1px solid #beb8b8;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.remoteButtons div:hover, 
+.remoteButtons div:active{
+  border: 2px solid black;
+}

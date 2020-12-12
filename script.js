@@ -9,12 +9,12 @@ var Remote = /** @class */ (function () {
         this.tv = tv;
         this.currentVideoIndex = 0;
         this.video = document.getElementById('tv');
-        var remoteDiv = document.createElement('div');
-        remoteDiv.classList.add('mt-3');
-        remoteDiv.setAttribute('id', 'remoteFrame');
-        var showNextBtn = document.createElement('button');
-        showNextBtn.classList.add('btn', 'btn-warning');
-        showNextBtn.innerHTML = 'Show Next';
+        var buttonsDiv = document.createElement('div');
+        buttonsDiv.setAttribute('class', 'remoteButtons mt-3');
+        buttonsDiv.setAttribute('id', 'remoteFrame');
+        var showNextBtn = document.createElement('div');
+        showNextBtn.classList.add();
+        showNextBtn.innerHTML = '<i class="fas fa-forward"></i>';
         showNextBtn.onclick = function () {
             if (_this.currentVideoIndex === _this.collection.length - 1) {
                 _this.currentVideoIndex = 0;
@@ -26,15 +26,12 @@ var Remote = /** @class */ (function () {
             var tv = document.getElementById('tv');
             tv.parentNode.removeChild(tv);
             var videoFrame = _this.tv.createVideo(_this.collection[_this.currentVideoIndex]);
-            _this.video = document.getElementById('tv');
+            _this.video = videoFrame; //<HTMLVideoElement>document.getElementById('tv');
             document.getElementById('tvFrame').append(videoFrame);
         };
-        var showPreviousBtn = document.createElement('button');
-        showPreviousBtn.classList.add('btn', 'btn-danger', 'ml-2');
-        showPreviousBtn.innerHTML = 'Show Previous';
+        var showPreviousBtn = document.createElement('div');
+        showPreviousBtn.innerHTML = '<i class="fas fa-backward"></i>';
         showPreviousBtn.onclick = function () {
-            console.log(_this);
-            console.log('Previous clicked');
             if (_this.currentVideoIndex === 0) {
                 _this.currentVideoIndex = _this.collection.length - 1;
             }
@@ -43,48 +40,43 @@ var Remote = /** @class */ (function () {
             }
             var tv = document.getElementById('tv');
             tv.parentNode.removeChild(tv);
-            var video = _this.tv.createVideo(_this.collection[_this.currentVideoIndex]);
-            _this.video = document.getElementById('tv');
-            document.getElementById('tvFrame').append(video);
+            var videoFrame = _this.tv.createVideo(_this.collection[_this.currentVideoIndex]);
+            _this.video = videoFrame; //<HTMLVideoElement>document.getElementById('tv');
+            document.getElementById('tvFrame').append(videoFrame);
         };
-        var playBtn = document.createElement('button');
-        playBtn.classList.add('btn', 'btn-primary', 'ml-2');
-        playBtn.innerHTML = 'Play';
+        var playBtn = document.createElement('div');
+        playBtn.innerHTML = '<i class="fas fa-play"></i>';
         playBtn.onclick = function () {
             _this.playVideo(_this.video);
         };
-        var pauseBtn = document.createElement('button');
-        pauseBtn.classList.add('btn', 'btn-info', 'ml-2');
-        pauseBtn.innerHTML = 'Pause';
+        var pauseBtn = document.createElement('div');
+        pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
         pauseBtn.onclick = function () {
             _this.pauseVideo(_this.video);
         };
-        var stopBtn = document.createElement('button');
-        stopBtn.classList.add('btn', 'ml-2');
-        stopBtn.innerHTML = 'Stop';
+        var stopBtn = document.createElement('div');
+        stopBtn.innerHTML = '<i class="fas fa-stop"></i>';
         stopBtn.onclick = function () {
             _this.stopVideo(_this.video);
         };
-        var muteUnMuteVolumeBtn = document.createElement('button');
-        muteUnMuteVolumeBtn.classList.add('btn', 'ml-2');
-        muteUnMuteVolumeBtn.innerHTML = 'mute/unmute';
+        var muteUnMuteVolumeBtn = document.createElement('div');
+        muteUnMuteVolumeBtn.setAttribute('id', 'muteUnMute');
+        muteUnMuteVolumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
         muteUnMuteVolumeBtn.onclick = function () {
             _this.muteUnMuteVolume(_this.video);
         };
-        var increaseVolumeBtn = document.createElement('button');
-        increaseVolumeBtn.classList.add('btn', 'ml-2');
-        increaseVolumeBtn.innerHTML = 'Increase';
+        var increaseVolumeBtn = document.createElement('div');
+        increaseVolumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
         increaseVolumeBtn.onclick = function () {
             _this.increaseVolume(_this.video);
         };
-        var decreaseVolumeBtn = document.createElement('button');
-        decreaseVolumeBtn.classList.add('btn', 'ml-2');
-        decreaseVolumeBtn.innerHTML = 'Decrease';
+        var decreaseVolumeBtn = document.createElement('div');
+        decreaseVolumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
         decreaseVolumeBtn.onclick = function () {
             _this.decreaseVolume(_this.video);
         };
-        remoteDiv.append(showNextBtn, showPreviousBtn, playBtn, pauseBtn, stopBtn, muteUnMuteVolumeBtn, increaseVolumeBtn, decreaseVolumeBtn);
-        document.getElementById('remoteColumn').append(remoteDiv);
+        buttonsDiv.append(showPreviousBtn, showNextBtn, playBtn, pauseBtn, stopBtn, muteUnMuteVolumeBtn, increaseVolumeBtn, decreaseVolumeBtn);
+        document.getElementById('remoteColumn').append(buttonsDiv);
     }
     Remote.prototype.stopVideo = function (v) {
         v.load();
@@ -97,24 +89,29 @@ var Remote = /** @class */ (function () {
         v.pause();
     };
     Remote.prototype.muteUnMuteVolume = function (v) {
-        console.log(v);
         this.tvMute = !this.tvMute;
+        var muteBtn = document.querySelector('#muteUnMute');
         if (this.tvMute) {
+            muteBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
+            muteBtn.classList.add('bg-danger');
+            muteBtn.style.width = '40px';
             v.muted = true;
         }
         else {
+            muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            muteBtn.classList.remove('bg-danger');
             v.muted = false;
         }
     };
     Remote.prototype.increaseVolume = function (v) {
-        var volume = +(parseFloat(v.volume).toFixed(1));
+        var volume = +((v.volume).toFixed(1));
         if (volume <= 0.9) {
             volume = volume + 0.1;
         }
         v.volume = volume;
     };
     Remote.prototype.decreaseVolume = function (v) {
-        var volume = +(parseFloat(v.volume).toFixed(1));
+        var volume = +((v.volume).toFixed(1));
         if (volume >= 0.1) {
             volume = volume - 0.1;
         }
@@ -132,7 +129,6 @@ var TV = /** @class */ (function () {
         document.getElementById('tvColumn').append(tvDiv);
     }
     TV.prototype.createVideo = function (channelSrc) {
-        console.log('channelSrc', channelSrc);
         var video = document.createElement('video');
         video.setAttribute('id', 'tv');
         video.classList.add('hidden', 'mt-2');

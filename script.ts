@@ -13,13 +13,14 @@ class Remote{
     this.tv = tv;
     this.currentVideoIndex = 0;
     this.video = <HTMLVideoElement>document.getElementById('tv');
-    const remoteDiv = document.createElement('div');
-    remoteDiv.classList.add('mt-3');
-    remoteDiv.setAttribute('id', 'remoteFrame');
 
-    const showNextBtn = document.createElement('button');
-      showNextBtn.classList.add('btn', 'btn-warning');
-      showNextBtn.innerHTML = 'Show Next';
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.setAttribute('class', 'remoteButtons mt-3');
+    buttonsDiv.setAttribute('id', 'remoteFrame');
+
+    const showNextBtn = document.createElement('div');
+      showNextBtn.classList.add();
+      showNextBtn.innerHTML = '<i class="fas fa-forward"></i>';
 
       showNextBtn.onclick = () => {
         if(this.currentVideoIndex === this.collection.length - 1){
@@ -28,83 +29,75 @@ class Remote{
           this.currentVideoIndex++;
         }
         this.video = null;
-        const tv =document.getElementById('tv');
+        const tv = document.getElementById('tv');
         tv.parentNode.removeChild(tv);
         const videoFrame = this.tv.createVideo(this.collection[this.currentVideoIndex]);
-        this.video = <HTMLVideoElement>document.getElementById('tv');
+        this.video = videoFrame; //<HTMLVideoElement>document.getElementById('tv');
         document.getElementById('tvFrame').append(videoFrame);
       }
 
-      const showPreviousBtn = document.createElement('button');
-      showPreviousBtn.classList.add('btn', 'btn-danger', 'ml-2');
-      showPreviousBtn.innerHTML = 'Show Previous';
+      const showPreviousBtn = document.createElement('div');
+      showPreviousBtn.innerHTML = '<i class="fas fa-backward"></i>';
 
       showPreviousBtn.onclick = () => {
-        console.log(this);
-        console.log('Previous clicked');
         if(this.currentVideoIndex === 0){
           this.currentVideoIndex = this.collection.length - 1;   
         } else {
           this.currentVideoIndex--;
         }
         
-        const tv =document.getElementById('tv');
+        const tv = document.getElementById('tv');
         tv.parentNode.removeChild(tv);
-        const video = this.tv.createVideo(this.collection[this.currentVideoIndex]);
-        this.video = <HTMLVideoElement>document.getElementById('tv');
-        document.getElementById('tvFrame').append(video);  
+        const videoFrame = this.tv.createVideo(this.collection[this.currentVideoIndex]);
+        this.video = videoFrame; //<HTMLVideoElement>document.getElementById('tv');
+        document.getElementById('tvFrame').append(videoFrame);  
       }
 
-      const playBtn = document.createElement('button');
-      playBtn.classList.add('btn', 'btn-primary', 'ml-2');
-      playBtn.innerHTML = 'Play';
+      const playBtn = document.createElement('div');
+      playBtn.innerHTML = '<i class="fas fa-play"></i>';
 
       playBtn.onclick = () => {
         this.playVideo(this.video);
       }
 
-      const pauseBtn = document.createElement('button');
-      pauseBtn.classList.add('btn', 'btn-info', 'ml-2');
-      pauseBtn.innerHTML = 'Pause';
+      const pauseBtn = document.createElement('div');
+      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
 
       pauseBtn.onclick = () => {
         this.pauseVideo(this.video);
       }
 
-      const stopBtn = document.createElement('button');
-      stopBtn.classList.add('btn', 'ml-2');
-      stopBtn.innerHTML = 'Stop';
+      const stopBtn = document.createElement('div');
+      stopBtn.innerHTML = '<i class="fas fa-stop"></i>';
 
       stopBtn.onclick = () => {
         this.stopVideo(this.video);
       }
 
-      const muteUnMuteVolumeBtn = document.createElement('button');
-      muteUnMuteVolumeBtn.classList.add('btn', 'ml-2');
-      muteUnMuteVolumeBtn.innerHTML = 'mute/unmute';
+      const muteUnMuteVolumeBtn = document.createElement('div');
+      muteUnMuteVolumeBtn.setAttribute('id', 'muteUnMute');
+      muteUnMuteVolumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
 
       muteUnMuteVolumeBtn.onclick = () => {
         this.muteUnMuteVolume(this.video);
       }
 
-      const increaseVolumeBtn = document.createElement('button');
-      increaseVolumeBtn.classList.add('btn', 'ml-2');
-      increaseVolumeBtn.innerHTML = 'Increase';
+      const increaseVolumeBtn = document.createElement('div');
+      increaseVolumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
 
       increaseVolumeBtn.onclick = () => {
         this.increaseVolume(this.video);
       }
 
-      const decreaseVolumeBtn = document.createElement('button');
-      decreaseVolumeBtn.classList.add('btn', 'ml-2');
-      decreaseVolumeBtn.innerHTML = 'Decrease';
+      const decreaseVolumeBtn = document.createElement('div');
+      decreaseVolumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
 
       decreaseVolumeBtn.onclick = () => {
         this.decreaseVolume(this.video);
       }
 
-      remoteDiv.append(showNextBtn, showPreviousBtn, playBtn, pauseBtn, stopBtn, muteUnMuteVolumeBtn, increaseVolumeBtn,decreaseVolumeBtn);
-      document.getElementById('remoteColumn').append(remoteDiv);
+      buttonsDiv.append(showPreviousBtn, showNextBtn, playBtn, pauseBtn, stopBtn, muteUnMuteVolumeBtn, increaseVolumeBtn,decreaseVolumeBtn);
+      document.getElementById('remoteColumn').append(buttonsDiv);
   }
 
   stopVideo(v: HTMLVideoElement){
@@ -121,18 +114,23 @@ class Remote{
   }
 
   muteUnMuteVolume(v: HTMLVideoElement){
-    console.log(v);
     this.tvMute = !this.tvMute;
-    
+    const muteBtn = <HTMLElement>document.querySelector('#muteUnMute');
+
     if(this.tvMute){
+      muteBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
+      muteBtn.classList.add('bg-danger');
+      muteBtn.style.width = '40px';
       v.muted = true;
     } else{
+      muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      muteBtn.classList.remove('bg-danger');
       v.muted = false;
     }
   }
 
   increaseVolume(v: HTMLVideoElement){
-    let volume = +(parseFloat(v.volume).toFixed(1))
+    let volume = +((v.volume).toFixed(1))
     if(volume <= 0.9){
       volume = volume + 0.1;
     }
@@ -140,7 +138,7 @@ class Remote{
   }
 
   decreaseVolume(v: HTMLVideoElement){
-    let volume = +(parseFloat(v.volume).toFixed(1))
+    let volume = +((v.volume).toFixed(1))
     if(volume >= 0.1){
       volume = volume - 0.1;
     }
@@ -160,8 +158,7 @@ class TV{
 
   }
 
-  createVideo(channelSrc: string){
-    console.log('channelSrc',channelSrc);
+  createVideo(channelSrc: string): HTMLVideoElement{
     const video = document.createElement('video');
     video.setAttribute('id', 'tv');
     video.classList.add('hidden', 'mt-2');
