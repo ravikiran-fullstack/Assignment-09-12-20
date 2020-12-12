@@ -20,7 +20,7 @@ class Remote{
 
     const showNextBtn = document.createElement('div');
       showNextBtn.classList.add();
-      showNextBtn.innerHTML = '<i class="fas fa-forward"></i>';
+      showNextBtn.innerHTML = 'Next';
 
       showNextBtn.onclick = () => {
         if(this.currentVideoIndex === this.collection.length - 1){
@@ -37,7 +37,7 @@ class Remote{
       }
 
       const showPreviousBtn = document.createElement('div');
-      showPreviousBtn.innerHTML = '<i class="fas fa-backward"></i>';
+      showPreviousBtn.innerHTML = 'Previous';
 
       showPreviousBtn.onclick = () => {
         if(this.currentVideoIndex === 0){
@@ -54,21 +54,21 @@ class Remote{
       }
 
       const playBtn = document.createElement('div');
-      playBtn.innerHTML = '<i class="fas fa-play"></i>';
+      playBtn.innerHTML = 'Play';
 
       playBtn.onclick = () => {
         this.playVideo(this.video);
       }
 
       const pauseBtn = document.createElement('div');
-      pauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      pauseBtn.innerHTML = 'Pause';
 
       pauseBtn.onclick = () => {
         this.pauseVideo(this.video);
       }
 
       const stopBtn = document.createElement('div');
-      stopBtn.innerHTML = '<i class="fas fa-stop"></i>';
+      stopBtn.innerHTML = 'Stop';
 
       stopBtn.onclick = () => {
         this.stopVideo(this.video);
@@ -76,21 +76,21 @@ class Remote{
 
       const muteUnMuteVolumeBtn = document.createElement('div');
       muteUnMuteVolumeBtn.setAttribute('id', 'muteUnMute');
-      muteUnMuteVolumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      muteUnMuteVolumeBtn.innerHTML = 'Mute';
 
       muteUnMuteVolumeBtn.onclick = () => {
         this.muteUnMuteVolume(this.video);
       }
 
       const increaseVolumeBtn = document.createElement('div');
-      increaseVolumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+      increaseVolumeBtn.innerHTML = 'Volume+';
 
       increaseVolumeBtn.onclick = () => {
         this.increaseVolume(this.video);
       }
 
       const decreaseVolumeBtn = document.createElement('div');
-      decreaseVolumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+      decreaseVolumeBtn.innerHTML = 'Volume-';
 
       decreaseVolumeBtn.onclick = () => {
         this.decreaseVolume(this.video);
@@ -118,12 +118,11 @@ class Remote{
     const muteBtn = <HTMLElement>document.querySelector('#muteUnMute');
 
     if(this.tvMute){
-      muteBtn.innerHTML = '<i class="fas fa-volume-off"></i>';
+      muteBtn.innerHTML = 'Unmute';
       muteBtn.classList.add('bg-danger');
-      muteBtn.style.width = '40px';
       v.muted = true;
     } else{
-      muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+      muteBtn.innerHTML = 'Mute';
       muteBtn.classList.remove('bg-danger');
       v.muted = false;
     }
