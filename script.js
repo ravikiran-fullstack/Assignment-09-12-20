@@ -1,67 +1,33 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var MediaSystem = /** @class */ (function () {
-    function MediaSystem() {
-    }
-    MediaSystem.prototype.playNext = function () {
-    };
-    MediaSystem.prototype.playPrevious = function () {
-    };
-    MediaSystem.prototype.playCurrent = function () {
-    };
-    MediaSystem.prototype.pauseCurrent = function () {
-    };
-    return MediaSystem;
-}());
-var Tv = /** @class */ (function (_super) {
-    __extends(Tv, _super);
-    function Tv() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Tv;
-}(MediaSystem));
-var Remote = /** @class */ (function (_super) {
-    __extends(Remote, _super);
-    function Remote() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return Remote;
-}(MediaSystem));
-var Gallery = /** @class */ (function () {
-    function Gallery() {
+var Remote = /** @class */ (function () {
+    function Remote(tv) {
         var _this = this;
-        this.collection = ['./images/1.jpg', './images/2.jpg', './images/3.jpg'];
-        var value = this.test('Hello');
-        this.delay();
-        console.log(value);
-        this.currentImageIndex = 0;
-        var galleryDiv = document.createElement('div');
-        galleryDiv.classList.add('galleryFrame', 'mt-3');
-        galleryDiv.setAttribute('id', 'galleryFrame');
+        this.collection = ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
+            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4'
+        ];
+        this.tv = tv;
+        this.currentVideoIndex = -1;
+        this.video = document.getElementById('tv');
+        var remoteDiv = document.createElement('div');
+        remoteDiv.classList.add('mt-3');
+        remoteDiv.setAttribute('id', 'remoteFrame');
         var showNextBtn = document.createElement('button');
         showNextBtn.classList.add('btn', 'btn-warning');
         showNextBtn.innerHTML = 'Show Next';
         showNextBtn.onclick = function () {
-            console.log(_this);
-            console.log('Next clicked');
-            if (_this.currentImageIndex === 2) {
-                _this.currentImageIndex = 0;
+            if (_this.currentVideoIndex === 2) {
+                _this.currentVideoIndex = 0;
             }
             else {
-                _this.currentImageIndex++;
+                _this.currentVideoIndex++;
             }
-            document.getElementById('galleryImage').setAttribute('src', "" + _this.collection[_this.currentImageIndex]);
+            _this.video = null;
+            var tv = document.getElementById('tv');
+            tv.parentNode.removeChild(tv);
+            var videoFrame = _this.tv.createVideo(_this.collection[_this.currentVideoIndex]);
+            _this.video = document.getElementById('tv');
+            document.getElementById('tvFrame').append(videoFrame);
         };
         var showPreviousBtn = document.createElement('button');
         showPreviousBtn.classList.add('btn', 'btn-danger', 'ml-2');
@@ -69,41 +35,129 @@ var Gallery = /** @class */ (function () {
         showPreviousBtn.onclick = function () {
             console.log(_this);
             console.log('Previous clicked');
-            if (_this.currentImageIndex === 0) {
-                _this.currentImageIndex = 2;
+            if (_this.currentVideoIndex === 0) {
+                _this.currentVideoIndex = 2;
             }
             else {
-                _this.currentImageIndex--;
+                _this.currentVideoIndex--;
             }
-            document.getElementById('galleryImage').setAttribute('src', "" + _this.collection[_this.currentImageIndex]);
+            var tv = document.getElementById('tv');
+            tv.parentNode.removeChild(tv);
+            var video = _this.tv.createVideo(_this.collection[_this.currentVideoIndex]);
+            _this.video = document.getElementById('tv');
+            document.getElementById('tvFrame').append(video);
         };
-        var image = document.createElement('img');
-        image.setAttribute('src', "" + this.collection[this.currentImageIndex]);
-        image.setAttribute('id', 'galleryImage');
-        image.classList.add('imgStyle', 'mt-2');
-        image.setAttribute('alt', 'error');
-        galleryDiv.append(showNextBtn, showPreviousBtn, image);
-        document.getElementById('galleryColumn').append(galleryDiv);
+        var playBtn = document.createElement('button');
+        playBtn.classList.add('btn', 'btn-primary', 'ml-2');
+        playBtn.innerHTML = 'Play';
+        playBtn.onclick = function () {
+            _this.playVideo(_this.video);
+        };
+        var pauseBtn = document.createElement('button');
+        pauseBtn.classList.add('btn', 'btn-info', 'ml-2');
+        pauseBtn.innerHTML = 'Pause';
+        pauseBtn.onclick = function () {
+            _this.pauseVideo(_this.video);
+        };
+        var stopBtn = document.createElement('button');
+        stopBtn.classList.add('btn', 'ml-2');
+        stopBtn.innerHTML = 'Stop';
+        stopBtn.onclick = function () {
+            _this.stopVideo(_this.video);
+        };
+        var muteUnMuteVolumeBtn = document.createElement('button');
+        muteUnMuteVolumeBtn.classList.add('btn', 'ml-2');
+        muteUnMuteVolumeBtn.innerHTML = 'mute/unmute';
+        muteUnMuteVolumeBtn.onclick = function () {
+            _this.muteUnMuteVolume(_this.video);
+        };
+        var increaseVolumeBtn = document.createElement('button');
+        increaseVolumeBtn.classList.add('btn', 'ml-2');
+        increaseVolumeBtn.innerHTML = 'Increase';
+        increaseVolumeBtn.onclick = function () {
+            _this.increaseVolume(_this.video);
+        };
+        var decreaseVolumeBtn = document.createElement('button');
+        decreaseVolumeBtn.classList.add('btn', 'ml-2');
+        decreaseVolumeBtn.innerHTML = 'Decrease';
+        decreaseVolumeBtn.onclick = function () {
+            _this.decreaseVolume(_this.video);
+        };
+        remoteDiv.append(showNextBtn, showPreviousBtn, playBtn, pauseBtn, stopBtn, muteUnMuteVolumeBtn, increaseVolumeBtn, decreaseVolumeBtn);
+        document.getElementById('remoteColumn').append(remoteDiv);
     }
-    Gallery.prototype.test = function (a) {
-        console.log('testing', a);
-        return a;
+    Remote.prototype.stopVideo = function (v) {
+        v.load();
+        v.pause();
     };
-    Gallery.prototype.delay = function () {
-        return new Promise(function (res, rej) {
-            setTimeout(function () {
-                console.log('resolved');
-                res();
-            }, 1000);
-        });
+    Remote.prototype.playVideo = function (v) {
+        v.play();
     };
-    return Gallery;
+    Remote.prototype.pauseVideo = function (v) {
+        v.pause();
+    };
+    Remote.prototype.muteUnMuteVolume = function (v) {
+        console.log(v);
+        this.tvMute = !this.tvMute;
+        if (this.tvMute) {
+            v.muted = true;
+        }
+        else {
+            v.muted = false;
+        }
+    };
+    Remote.prototype.increaseVolume = function (v) {
+        var volume = +(parseFloat(v.volume).toFixed(1));
+        if (volume <= 0.9) {
+            volume = volume + 0.1;
+        }
+        v.volume = volume;
+    };
+    Remote.prototype.decreaseVolume = function (v) {
+        var volume = +(parseFloat(v.volume).toFixed(1));
+        if (volume >= 0.1) {
+            volume = volume - 0.1;
+        }
+        v.volume = volume;
+    };
+    return Remote;
 }());
-//         <div class="galleryFrame mt-3" id="galleryFrame">
-//           <button class="btn btn-warning">Show Next</button>
-//           <button class="btn btn-danger" >Show Previous</button>
-//           <img src="./images/2.jpg" class="imgStyle" alt="Responsive image">
-//         </div>
-function showGallery() {
-    var gallery = new Gallery();
+var TV = /** @class */ (function () {
+    function TV() {
+        var tvDiv = document.createElement('div');
+        tvDiv.classList.add('tvFrame', 'mt-3');
+        tvDiv.setAttribute('id', 'tvFrame');
+        var video = this.createVideo('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4');
+        tvDiv.append(video);
+        document.getElementById('tvColumn').append(tvDiv);
+    }
+    TV.prototype.createVideo = function (channelSrc) {
+        console.log('channelSrc', channelSrc);
+        var video = document.createElement('video');
+        video.setAttribute('id', 'tv');
+        video.classList.add('hidden', 'mt-2');
+        video.setAttribute('controls', 'true');
+        video.style.height = '253px';
+        video.style.width = '600px';
+        video.setAttribute('src', channelSrc);
+        video.play();
+        return video;
+    };
+    return TV;
+}());
+var tvOn = false;
+function onOffTV() {
+    tvOn = !tvOn;
+    if (tvOn) {
+        document.getElementById('onOffTvId').innerHTML = 'Turn Off';
+        var tv = new TV();
+        var remote = new Remote(tv);
+    }
+    else {
+        document.getElementById('onOffTvId').innerHTML = 'Turn On';
+        var tvFrame = document.getElementById('tvFrame');
+        tvFrame.parentNode.removeChild(tvFrame);
+        var remoteFrame = document.getElementById('remoteFrame');
+        remoteFrame.parentNode.removeChild(remoteFrame);
+    }
 }
