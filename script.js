@@ -1,13 +1,13 @@
 var Remote = /** @class */ (function () {
     function Remote(tv) {
         var _this = this;
-        this.collection = ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-            'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4'
+        this.collection = ['https://res.cloudinary.com/dndxifzl4/video/upload/v1607761709/TvApp/dareDevil-batman_bgmb5t.mp4',
+            'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761716/TvApp/starwars_ulaavh.mp4',
+            'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761700/TvApp/dareDevil_t8lu6s.mp4',
+            'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761689/TvApp/avengers_hkfn6x.mp4'
         ];
         this.tv = tv;
-        this.currentVideoIndex = -1;
+        this.currentVideoIndex = 0;
         this.video = document.getElementById('tv');
         var remoteDiv = document.createElement('div');
         remoteDiv.classList.add('mt-3');
@@ -16,7 +16,7 @@ var Remote = /** @class */ (function () {
         showNextBtn.classList.add('btn', 'btn-warning');
         showNextBtn.innerHTML = 'Show Next';
         showNextBtn.onclick = function () {
-            if (_this.currentVideoIndex === 2) {
+            if (_this.currentVideoIndex === _this.collection.length - 1) {
                 _this.currentVideoIndex = 0;
             }
             else {
@@ -36,7 +36,7 @@ var Remote = /** @class */ (function () {
             console.log(_this);
             console.log('Previous clicked');
             if (_this.currentVideoIndex === 0) {
-                _this.currentVideoIndex = 2;
+                _this.currentVideoIndex = _this.collection.length - 1;
             }
             else {
                 _this.currentVideoIndex--;
@@ -127,7 +127,7 @@ var TV = /** @class */ (function () {
         var tvDiv = document.createElement('div');
         tvDiv.classList.add('tvFrame', 'mt-3');
         tvDiv.setAttribute('id', 'tvFrame');
-        var video = this.createVideo('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4');
+        var video = this.createVideo('https://res.cloudinary.com/dndxifzl4/video/upload/v1607761709/TvApp/dareDevil-batman_bgmb5t.mp4');
         tvDiv.append(video);
         document.getElementById('tvColumn').append(tvDiv);
     }

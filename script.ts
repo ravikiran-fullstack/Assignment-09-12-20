@@ -1,9 +1,9 @@
 class Remote{
   tv:TV;
-  collection:string[] = ['http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
-                          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
-                          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
-                          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4'
+  collection:string[] = [ 'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761709/TvApp/dareDevil-batman_bgmb5t.mp4',
+                          'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761716/TvApp/starwars_ulaavh.mp4',
+                          'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761700/TvApp/dareDevil_t8lu6s.mp4',
+                          'https://res.cloudinary.com/dndxifzl4/video/upload/v1607761689/TvApp/avengers_hkfn6x.mp4'
                         ];
   currentVideoIndex: number;
   tvVolume: number;
@@ -11,7 +11,7 @@ class Remote{
   video: HTMLVideoElement;
   constructor(tv:TV){
     this.tv = tv;
-    this.currentVideoIndex = -1;
+    this.currentVideoIndex = 0;
     this.video = <HTMLVideoElement>document.getElementById('tv');
     const remoteDiv = document.createElement('div');
     remoteDiv.classList.add('mt-3');
@@ -22,7 +22,7 @@ class Remote{
       showNextBtn.innerHTML = 'Show Next';
 
       showNextBtn.onclick = () => {
-        if(this.currentVideoIndex === 2){
+        if(this.currentVideoIndex === this.collection.length - 1){
           this.currentVideoIndex = 0;  
         } else {
           this.currentVideoIndex++;
@@ -43,7 +43,7 @@ class Remote{
         console.log(this);
         console.log('Previous clicked');
         if(this.currentVideoIndex === 0){
-          this.currentVideoIndex = 2;   
+          this.currentVideoIndex = this.collection.length - 1;   
         } else {
           this.currentVideoIndex--;
         }
@@ -154,7 +154,7 @@ class TV{
     const tvDiv = document.createElement('div');
     tvDiv.classList.add('tvFrame','mt-3');
     tvDiv.setAttribute('id', 'tvFrame');
-    const video = this.createVideo('http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4');      
+    const video = this.createVideo('https://res.cloudinary.com/dndxifzl4/video/upload/v1607761709/TvApp/dareDevil-batman_bgmb5t.mp4');      
     tvDiv.append(video);
     document.getElementById('tvColumn').append(tvDiv);
 
